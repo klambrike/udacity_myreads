@@ -25,13 +25,13 @@ const dummyBooks = [
 ]
 
 it('shows empty grid of books', () => {
-    const wrapped = shallow(<BookGrid />);
+    const wrapped = shallow(<BookGrid bookshelvesNames={[]}/>);
 
     expect(wrapped.find(Book).length).toEqual(0);
 })
 
 it('shows 3 books in grid based on props', () => {
-    const wrapped = shallow(<BookGrid books={dummyBooks} />)
+    const wrapped = shallow(<BookGrid books={dummyBooks}  bookshelvesNames={[]}/>)
 
     expect(wrapped.find(Book).length).toEqual(3);
 })

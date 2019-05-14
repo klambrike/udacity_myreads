@@ -2,7 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getShelfNameFromId } from "components/BookShelves";
 
-const BookMoveToSelector = ({ selectedShelfName, possibleShelves }) => {
+const BookMoveToSelector = ({ selectedShelfName, possibleShelves, onOptionSelected }) => {
+
+    const optionSelected = (element) => {
+        onOptionSelected(element.target.value);
+    }
 
     return (
         <div className="book-shelf-changer">
@@ -12,6 +16,8 @@ const BookMoveToSelector = ({ selectedShelfName, possibleShelves }) => {
                     <option
                         value={shelf}
                         key={index}
+                        selected={shelf === selectedShelfName}
+                        onSelect={optionSelected}
                     >{getShelfNameFromId(shelf)}</option>
                 ))}
                 <option value="none">None</option>
@@ -22,7 +28,8 @@ const BookMoveToSelector = ({ selectedShelfName, possibleShelves }) => {
 
 BookMoveToSelector.propTypes = {
     selectedShelfName: PropTypes.string.isRequired,
-    possibleShelves: PropTypes.array.isRequired
+    possibleShelves: PropTypes.array.isRequired,
+    onOptionSelected: PropTypes.func.isRequired
 }
 
 export default BookMoveToSelector

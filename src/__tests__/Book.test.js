@@ -15,7 +15,7 @@ const dummyBook = {
 let wrapper;
 
 beforeEach(() => {
-    wrapper = shallow(<Book book={dummyBook} bookshelvesNames={[]}/>)
+    wrapper = shallow(<Book book={dummyBook} bookshelvesNames={[]} onChangeShelf={() => {}}/>)
 })
 
 

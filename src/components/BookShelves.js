@@ -1,37 +1,49 @@
 import React, { Fragment } from 'react'
 import BookShelf from 'components/BookShelf';
+import PropTypes from 'prop-types'
 
-export const BookShelves = ({ bookshelvesNames, books }) => (
-    <Fragment>
-        {bookshelvesNames && bookshelvesNames.map(shelfName => (
-            <BookShelf
-                key={shelfName}
-                books={books.filter(book => book.shelf === shelfName)}
-                shelfName={shelfName}
-                bookshelvesNames={bookshelvesNames} />
-        ))}
-    </Fragment>
-)
 
 export const shelfNames = [
     {
         literalName: "Currently reading",
-        id: "currentlyReading"
+        id: "currentlyReading",
+        isVisible: true
     },
     {
         literalName: "Want to read",
-        id: "wantToRead"
+        id: "wantToRead",
+        isVisible: true
     },
     {
         literalName: "Read",
-        id: "read"
+        id: "read",
+        isVisible: true
     },
     {
         literalName: "None",
-        id: "none"
+        id: "none",
+        isVisible: false
     }
 ]
 
-export const getShelfNameFromId = (shelfNameId) => {
-    return shelfNames.filter(shelf => shelf.id === shelfNameId)[0].literalName
+export const BookShelves = ({ books, onChangeShelf }) => {
+
+    return (
+    <Fragment>
+        {shelfNames.map(shelfName => (
+            shelfName.isVisible &&
+            <BookShelf
+                key={shelfName.id}
+                books={books.filter(book => book.shelf === shelfName.id)}
+                shelfName={shelfName.literalName}
+                bookshelves={shelfNames}
+                onChangeShelf={onChangeShelf}
+            />
+        ))}
+    </Fragment>
+)}
+
+BookShelves.propTypes = {
+    books: PropTypes.arrayOf(PropTypes.object),
+    onChangeShelf: PropTypes.func.isRequired
 }

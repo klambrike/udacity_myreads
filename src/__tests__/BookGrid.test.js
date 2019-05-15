@@ -24,14 +24,17 @@ const dummyBooks = [
     }
 ]
 
-it('shows empty grid of books', () => {
-    const wrapped = shallow(<BookGrid bookshelvesNames={[]}/>);
+let wrapped;
 
+beforeEach(() => {
+    wrapped = shallow(<BookGrid bookshelvesNames={[]} onChangeShelf={() => {}}/>);
+})
+
+it('shows empty grid of books', () => {
     expect(wrapped.find(Book).length).toEqual(0);
 })
 
 it('shows 3 books in grid based on props', () => {
-    const wrapped = shallow(<BookGrid books={dummyBooks}  bookshelvesNames={[]}/>)
-
+    wrapped.setProps({books: dummyBooks})
     expect(wrapped.find(Book).length).toEqual(3);
 })

@@ -2,12 +2,12 @@ import React from 'react'
 import BookMoveToSelector from 'components/BookMoveToSelector';
 import PropTypes from 'prop-types'
 
-const Book = ({ book, bookshelvesNames }) => {
+const Book = ({ book, bookshelvesNames, onChangeShelf }) => {
     const { title, authors, imageLinks, shelf } = book;
     const { thumbnail } = imageLinks;
 
-    const optionSelected = () => {
-
+    const optionSelected = (targetShelf) => {
+        onChangeShelf(book.id, targetShelf);
     }
 
     return (
@@ -27,7 +27,8 @@ const Book = ({ book, bookshelvesNames }) => {
 
 Book.propTypes = {
     book: PropTypes.object.isRequired,
-    bookshelvesNames: PropTypes.array.isRequired
+    bookshelvesNames: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
 }
 
 export default Book

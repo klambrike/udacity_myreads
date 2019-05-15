@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import * as BooksAPI from 'service/BooksAPI'
 import BookGrid from 'components/BookGrid';
-import { BookShelves } from 'components/BookShelves';
+import { BookShelves, shelfNames } from 'components/BookShelves';
 
 class BooksApp extends React.Component {
   state = {
@@ -12,28 +12,26 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
+    searchedBooks: [],
+    books: [],
     showSearchPage: false
   }
 
-  getBookshelvesNames = (books) => {
-    const bookshelvesNames = [];
-    books.forEach(book => {
-      if (bookshelvesNames.indexOf(book.shelf) < 0) {
-        bookshelvesNames.push(book.shelf);
-      }
-    });
-
-    return bookshelvesNames;
+  onChangeShelf = async (bookId, targetShelf) => {
+    await BooksAPI.update({ id: bookId }, targetShelf);
+    this.loadBooks();
   }
 
   componentDidMount() {
-    BooksAPI.getAll()
-      .then(books => {
-        this.setState({
-          books: books,
-          bookshelvesNames: this.getBookshelvesNames(books)
-        })
-      })
+    this.loadBooks()
+  }
+
+  loadBooks = async () => {
+    const books = await BooksAPI.getAll()
+
+    this.setState({
+      books: books
+    })
   }
 
   render() {
@@ -57,7 +55,11 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="search-books-results">
-              <BookGrid />
+              <BookGrid
+                books={this.state.searchedBooks}
+                bookshelvesNames={shelfNames}
+                onChangeShelf={this.onChangeShelf}
+              />
             </div>
           </div>
         ) : (
@@ -67,7 +69,10 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <BookShelves bookshelvesNames={this.state.bookshelvesNames} books={this.state.books} />
+                  <BookShelves
+                    books={this.state.books}
+                    onChangeShelf={this.onChangeShelf}
+                  />
                 </div>
               </div>
               <div className="open-search">

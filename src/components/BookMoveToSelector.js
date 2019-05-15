@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getShelfNameFromId } from "components/BookShelves";
 
 const BookMoveToSelector = ({ selectedShelfName, possibleShelves, onOptionSelected }) => {
 
@@ -10,17 +9,14 @@ const BookMoveToSelector = ({ selectedShelfName, possibleShelves, onOptionSelect
 
     return (
         <div className="book-shelf-changer">
-            <select>
+            <select defaultValue={selectedShelfName} onChange={optionSelected}>
                 <option value="move" disabled>Move to...</option>
-                {possibleShelves.map( (shelf, index) => (
+                {possibleShelves.map((shelf, index) => (
                     <option
-                        value={shelf}
+                        value={shelf.id}
                         key={index}
-                        selected={shelf === selectedShelfName}
-                        onSelect={optionSelected}
-                    >{getShelfNameFromId(shelf)}</option>
+                    >{shelf.literalName}</option>
                 ))}
-                <option value="none">None</option>
             </select>
         </div>
     )
@@ -28,7 +24,7 @@ const BookMoveToSelector = ({ selectedShelfName, possibleShelves, onOptionSelect
 
 BookMoveToSelector.propTypes = {
     selectedShelfName: PropTypes.string.isRequired,
-    possibleShelves: PropTypes.array.isRequired,
+    possibleShelves: PropTypes.arrayOf(PropTypes.object),
     onOptionSelected: PropTypes.func.isRequired
 }
 

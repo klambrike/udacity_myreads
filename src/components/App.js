@@ -1,8 +1,8 @@
 import React from 'react'
 import '../App.css'
 import * as BooksAPI from 'service/BooksAPI'
-import BookGrid from 'components/BookGrid';
 import { BookShelves, shelfNames } from 'components/BookShelves';
+import Search from './Search';
 
 class BooksApp extends React.Component {
   state = {
@@ -15,6 +15,18 @@ class BooksApp extends React.Component {
     searchedBooks: [],
     books: [],
     showSearchPage: false
+  }
+
+  onSearch = async (searchTerm) => {
+    this.setState({
+      searchTerm: searchTerm
+    })
+
+    const searchedBooks = await BooksAPI.search(searchTerm);
+
+    this.setState({
+      searchedBooks: searchedBooks
+    })
   }
 
   onChangeShelf = async (bookId, targetShelf) => {
@@ -38,30 +50,13 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author" />
-
-              </div>
-            </div>
-            <div className="search-books-results">
-              <BookGrid
-                books={this.state.searchedBooks}
-                bookshelvesNames={shelfNames}
-                onChangeShelf={this.onChangeShelf}
-              />
-            </div>
-          </div>
+          <Search
+            searchTerm={this.state.searchTerm}
+            onSearch={this.onSearch}
+            searchedBooks={this.state.searchedBooks}
+            shelfNames={shelfNames}
+            onChangeShelf={this.onChangeShelf}
+            />
         ) : (
             <div className="list-books">
               <div className="list-books-title">

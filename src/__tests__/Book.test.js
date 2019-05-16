@@ -26,3 +26,8 @@ it('shows title from props', () => {
 it('shows multiple authors from props', () => {
     expect(wrapper.text()).toContain("Nils Hartmann, Oliver Zeigermann");
 })
+
+it('shows empty div for authors if no authors exist for the book', () => {
+    wrapper = shallow(<Book book={{...dummyBook, authors: null}} bookshelvesNames={[]} onChangeShelf={() => {}}/>);
+    expect(wrapper.find('.book-authors').text()).toContain("");
+})

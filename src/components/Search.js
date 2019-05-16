@@ -2,15 +2,13 @@ import React from 'react'
 import SearchResult from '../SearchResult';
 import SearchBar from './SearchBar';
 
-const Search = ({ searchTerm, onSearch, searchedBooks, shelfNames, onChangeShelf }) => {
-    console.log(`--- SEARCH ---`);
-    console.log(`searchTerm: ${searchTerm}`);
-    console.log(`searchedBooks: ${JSON.stringify(searchedBooks)}, shelfNames: ${JSON.stringify(shelfNames)}`);
+const Search = ({ searchTerm, onSearch, searchedBooks, shelfNames, onChangeShelf, onCloseSearch }) => {
     return (
         <div className="search-books">
             <SearchBar
                 searchTerm={searchTerm}
                 onSearch={onSearch}
+                onCloseSearch={onCloseSearch}
             />
             <SearchResult
                 searchedBooks={searchedBooks}

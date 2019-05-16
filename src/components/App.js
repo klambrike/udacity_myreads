@@ -1,5 +1,6 @@
 import React from 'react'
 import '../App.css'
+import { Route } from "react-router-dom";
 import * as BooksAPI from 'service/BooksAPI'
 import { BookShelves, shelfNames } from 'components/BookShelves';
 import Search from './Search';
@@ -13,8 +14,7 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     searchedBooks: [],
-    books: [],
-    showSearchPage: false
+    books: []
   }
 
   onSearch = async (searchTerm) => {
@@ -22,12 +22,35 @@ class BooksApp extends React.Component {
       searchTerm: searchTerm
     })
 
-    const searchedBooks = await BooksAPI.search(searchTerm);
+    let searchedBooks = []
+    const searchResponse = await BooksAPI.search(searchTerm);
+    if (searchResponse && !searchResponse.error) {
+      searchedBooks = searchResponse
+    }
+
 
     this.setState({
-      searchedBooks: searchedBooks
+      searchedBooks: this.addSheldVariablesToSearchedBooks(searchedBooks, this.state.books)
     })
   }
+
+  addSheldVariablesToSearchedBooks = (searchedBooks, booksInShelves = []) => (
+    searchedBooks.map(searchedBook => (
+      {
+        ...searchedBook,
+        shelf: this.getShelfOfBookById(searchedBook.id, booksInShelves)
+      }
+    ))
+  )
+
+  getShelfOfBookById = (bookId, booksInShelves) => {
+    const book = this.findBookById(bookId, booksInShelves);
+    return !!book ? book.shelf : 'none';
+  }
+
+  findBookById = (bookId, booksInShelves) => (
+    booksInShelves.find(book => book.id === bookId)
+  )
 
   onChangeShelf = async (bookId, targetShelf) => {
     await BooksAPI.update({ id: bookId }, targetShelf);
@@ -49,32 +72,23 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
+        <Route path='/search' render={() => (
           <Search
             searchTerm={this.state.searchTerm}
             onSearch={this.onSearch}
             searchedBooks={this.state.searchedBooks}
             shelfNames={shelfNames}
             onChangeShelf={this.onChangeShelf}
-            />
-        ) : (
-            <div className="list-books">
-              <div className="list-books-title">
-                <h1>MyReads</h1>
-              </div>
-              <div className="list-books-content">
-                <div>
-                  <BookShelves
-                    books={this.state.books}
-                    onChangeShelf={this.onChangeShelf}
-                  />
-                </div>
-              </div>
-              <div className="open-search">
-                <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
-              </div>
-            </div>
-          )}
+          />
+        )}
+        />
+        <Route exact path='/' render={() => (
+          <BookShelves
+            books={this.state.books}
+            onChangeShelf={this.onChangeShelf}
+          />
+        )}
+        />
       </div>
     )
   }

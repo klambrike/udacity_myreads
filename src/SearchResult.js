@@ -11,11 +11,11 @@ const SearchResult = ({searchedBooks, shelfNames, onChangeShelf}) => (
         />
     </div>
 )
-/*
+
 SearchResult.propTypes = {
     searchedBooks: PropTypes.arrayOf(PropTypes.object),
     shelfNames: PropTypes.arrayOf(PropTypes.object),
     onChangeShelf: PropTypes.func.isRequired
 }
-*/
+
 export default SearchResult

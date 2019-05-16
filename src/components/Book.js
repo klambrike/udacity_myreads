@@ -3,8 +3,8 @@ import BookMoveToSelector from 'components/BookMoveToSelector';
 import PropTypes from 'prop-types'
 
 const Book = ({ book, bookshelvesNames, onChangeShelf }) => {
-    const { title, authors, imageLinks, shelf } = book;
-    const { thumbnail } = imageLinks;
+    const { title, authors, imageLinks = {}, shelf = 'none' } = book;
+    const { thumbnail = '' } = imageLinks;
 
     const optionSelected = (targetShelf) => {
         onChangeShelf(book.id, targetShelf);

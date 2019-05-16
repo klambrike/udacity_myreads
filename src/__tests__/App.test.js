@@ -1,17 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import App from 'components/App'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { BookShelves } from '../components/BookShelves';
+import { BrowserRouter } from 'react-router-dom'
 
-it('renders without crashing', () => {
-  const div = document.createElement('div')
-  ReactDOM.render(<App />, div)
-})
+let wrapped;
+
+beforeEach(() => {
+  wrapped = mount(<BrowserRouter><App /></BrowserRouter>)
+}) 
 
 it('renders bookshelves component', () => {
-  const wrapped = shallow(<App />);
   expect(wrapped.find(BookShelves).length).toEqual(1);
+  wrapped.unmount();
 })
-
 

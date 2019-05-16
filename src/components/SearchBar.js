@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-const SearchBar = ({ searchTerm, onSearch }) => (
+const SearchBar = ({ searchTerm = "", onSearch }) => (
     <div className="search-books-bar">
-        <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
+        <Link className="close-search" to='/'>Close</Link>
         <div className="search-books-input-wrapper">
             {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
